@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
 const Fib = () => {
   const [seenIndex, setSeenIndex] = useState([]);
@@ -12,12 +11,16 @@ const Fib = () => {
   }, []);
 
   async function fetchValues() {
-    const values = await axios.get("/api/values/current");
+    const values = await fetch("/api/values/current", {
+      method: "GET",
+    });
     setValues(values.data);
   }
 
   async function fetchIndexes() {
-    const indexes = await axios.get("/api/values/all");
+    const indexes = await fetch("/api/values/all", {
+      method: "GET",
+    });
     setSeenIndex(indexes);
   }
 
@@ -37,8 +40,12 @@ const Fib = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.post("/api/values", {
-      index,
+    await fetch("/api/values", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(index),
     });
     setIndex("");
   };
